@@ -1,0 +1,43 @@
+// 打開燈光
+{
+	"device": "light",
+  "command": "on"
+}
+
+// 關閉燈光
+{
+	"device": "light",
+  "command": "off"
+}
+
+// 調整燈光亮度
+{
+  "device": "light",
+  "command": "set_brightness",
+  "parameters": { "brightness": 75 }
+}
+
+// 閃光燈模式
+{
+  "device": "light",
+  "command": "flash"
+}
+
+// 停止馬達
+{
+  "device": "motor",
+  "command": "off"
+}
+
+// 開啟馬達
+{
+  "device": "motor",
+  "command": "on"
+}
+
+// 馬達以 x% 速度運轉
+{
+  "device": "motor",
+  "command": "set_speed",
+  "parameters": { "speed" : 50 }
+}
