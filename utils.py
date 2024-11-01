@@ -1,8 +1,11 @@
 import json
+import websocket
 from ws_client import WebSocketClient
+import time
 
 ws = WebSocketClient('ws://localhost:8765')
 ws.start()
+time.sleep(1)
 
 def ws_send(data):
     msg = json.dumps(data)

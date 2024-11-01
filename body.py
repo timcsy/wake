@@ -79,22 +79,32 @@ preprocess = transforms.Compose([
     transforms.ToTensor()
 ])
 
+last_state = None
+
 def covered(img_rgb):
+    global last_state
     img_resized = cv2.resize(img_rgb, (128, 128))
     
     # 正規化處理
     input_tensor = preprocess(img_resized).unsqueeze(0).to(device)
 
-    result = torch.argmax(model(input_tensor))[0]
+    result = torch.argmax(model(input_tensor)).item()
 
     if result == 1:
+        if last_state is not 1:
+            print('有被子')
+        last_state = 1
         utils.motor_on()
     elif result == 0:
+        if last_state is not 0:
+            print('沒被子')
+        last_state = 0
         utils.motor_off()
 
 def main():
     # 開啟攝影機
     cap = cv2.VideoCapture(0)
+    utils.motor_on()
 
     while cap.isOpened():
         ret, frame = cap.read()

@@ -7,7 +7,7 @@ const char* ssid = "Zenfone 8_6269";
 const char* password = "stu1090155";
 
 // WebSocket server IP
-const char* serverIP = "192.168.74.140";
+const char* serverIP = "192.168.169.98";
 const uint16_t serverPort = 8765;
 WebSocketsClient webSocket;
 
@@ -22,7 +22,8 @@ unsigned long flashInterval = 250; // Flashing interval in milliseconds
 
 void connectWiFi() {
     Serial.print("Connecting to WiFi");
-    WiFi.begin(ssid, password);
+    WiFi.begin("S24");
+    // WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
         Serial.print(".");

@@ -63,6 +63,7 @@ def analyze_intent(text):
 
 def main():
     try:
+        utils.motor_on()
         recognize_speech()
     except KeyboardInterrupt:
         print("程式已停止")
