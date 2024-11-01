@@ -39,8 +39,10 @@ def sit_up(rgb_frame, frame):
         # 顯示角度
         cv2.putText(frame, f'Angle: {int(body_angle)}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-        if body_angle > 45:
+        if body_angle < 135:
             utils.system_off()
+        elif body_angle > 135:
+            utils.motor_on()
 
     # 顯示影像
     cv2.imshow('Sit-up', frame)
@@ -91,12 +93,12 @@ def covered(img_rgb):
     result = torch.argmax(model(input_tensor)).item()
 
     if result == 1:
-        if last_state is not 1:
+        if last_state != 1:
             print('有被子')
         last_state = 1
         utils.motor_on()
     elif result == 0:
-        if last_state is not 0:
+        if last_state != 0:
             print('沒被子')
         last_state = 0
         utils.motor_off()
@@ -115,7 +117,7 @@ def main():
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         sit_up(rgb_frame, frame)
-        covered(rgb_frame)
+        # covered(rgb_frame)
 
         if cv2.waitKey(5) & 0xFF == 27:  # 按 "ESC" 鍵退出
             break
