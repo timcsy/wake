@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 和 POST 測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket 和 POST 測試</h1>
+    <div>
+        <h3>發送 POST 請求</h3>
+        <textarea id="messageInput" rows="4" cols="50" placeholder="輸入要發送的訊息..."></textarea><br>
+        <button id="sendMessageBtn">發送訊息到 WebSocket 客戶端</button>
+    </div>
+
+    <h3>接收到的訊息：</h3>
+    <div id="messages"></div>
+
+    <script>
+        // WebSocket 連接
+        const ws = new WebSocket('ws://localhost:8765');
+        
+        ws.onopen = () => {
+            console.log("WebSocket 連線成功！");
+        };
+
+        ws.onmessage = (event) => {
+            const messageContainer = document.getElementById('messages');
+            const newMessage = document.createElement('div');
+            newMessage.textContent = `收到訊息：${event.data}`;
+            messageContainer.appendChild(newMessage);
+            messageContainer.scrollTop = messageContainer.scrollHeight; // 滾動到最新訊息
+        };
+
+        ws.onclose = () => {
+            console.log("WebSocket 連線已關閉");
+        };
+
+        // 發送 POST 請求的函式
+        document.getElementById('sendMessageBtn').addEventListener('click', async () => {
+            const message = document.getElementById('messageInput').value;
+            if (message) {
+                try {
+                    const response = await fetch('http://localhost:8765', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message })
+                    });
+                    const result = await response.text();
+                    console.log(result);
+                    alert(result);
+                } catch (error) {
+                    console.error('發送 POST 請求失敗:', error);
+                    alert('發送請求時出錯');
+                }
+            } else {
+                alert('請輸入訊息');
+            }
+        });
+    </script>
+</body>
+</html>

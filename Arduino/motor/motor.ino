@@ -3,8 +3,13 @@
 #include <ArduinoJson.h>
 
 // WiFi credentials
+
+/*
 const char* ssid = "Zenfone 8_6269";
 const char* password = "stu1090155";
+*/
+const char* ssid = "MSGT";
+const char* password = "";
 
 // WebSocket server IP
 const char* serverIP = "192.168.169.98";

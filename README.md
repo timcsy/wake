@@ -6,7 +6,9 @@
 
 Server
 ```
-node server/server.js
+cd ./server
+npm install koa koa-router koa-bodyparser @koa/cors ws
+node server.js
 ```
 
 Python
