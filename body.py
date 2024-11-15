@@ -117,7 +117,7 @@ def main():
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         sit_up(rgb_frame, frame)
-        covered(rgb_frame)
+        # covered(rgb_frame)
 
         if cv2.waitKey(5) & 0xFF == 27:  # 按 "ESC" 鍵退出
             break

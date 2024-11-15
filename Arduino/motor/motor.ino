@@ -3,16 +3,11 @@
 #include <ArduinoJson.h>
 
 // WiFi credentials
-
-/*
-const char* ssid = "Zenfone 8_6269";
-const char* password = "stu1090155";
-*/
-const char* ssid = "MSGT";
-const char* password = "";
+const char* ssid = "lab";
+const char* password = "0912106664";
 
 // WebSocket server IP
-const char* serverIP = "192.168.169.98";
+const char* serverIP = "172.16.1.147";
 const uint16_t serverPort = 8765;
 WebSocketsClient webSocket;
 
@@ -23,8 +18,7 @@ const int motorPin2 = D2; // IN2 should be LOW
 // Function to connect to WiFi
 void connectWiFi() {
     Serial.print("Connecting to WiFi");
-    WiFi.begin("S24");
-    // WiFi.begin(ssid, password);
+    WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
         Serial.print(".");
@@ -65,7 +59,6 @@ void handleWebSocketMessage(const char* message) {
             controlMotor(0);   // Turn off the motor
         } else if (strcmp(command, "set_speed") == 0) {
             int percentage = doc["parameters"]["speed"];
-            // Convert percentage to PWM value (0-255)
             int speed = map(percentage, 0, 100, 0, 255);
             controlMotor(speed); // Set the motor speed
         }
