@@ -68,6 +68,28 @@ def clock_off():
         "command": "off"
     })
 
+def get_up():
+    ws_send({
+        "device": "you",
+        "command": "up"
+    })
+
+def not_get_up():
+    ws_send({
+        "device": "you",
+        "command": "down"
+    })
+
+def sleep_again(duration=300):
+    # duration: 賴床時間，以秒為單位
+    ws_send({
+        "device": "you",
+        "command": "sleep_again",
+        "parameters": {
+            "duration": duration
+        }
+    })
+
 def system_off():
     light_off()
     motor_off()

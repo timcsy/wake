@@ -72,7 +72,7 @@
   "command": "sleep_again",  // 賴床指令
   "parameters": 
   {
-    "duration": 5  // 賴床時間，以分鐘為單位
+    "duration": 300  // 賴床時間，以秒為單位
   }
 }
 
