@@ -14,7 +14,7 @@ if not cap.isOpened():
     exit()
 
 # 初始化照片計數器
-photo_count = 154
+photo_count = 251 
 
 print("按下 'N' 拍攝無被子的照片，按下 'P' 拍攝有被子的照片。按下 'Q' 離開程式。")
 

@@ -9,6 +9,9 @@ const router = new Router();
 app.use(bodyParser());
 app.use(cors());  // 啟用 CORS 中間件
 
+// 儲存所有 HTTP 輪詢請求
+let httpClients = [];
+
 // WebSocket 伺服器
 let wss;
 
@@ -24,12 +27,32 @@ router.post('/', (ctx) => {
                 client.send(message);
             }
         });
+
+        // 將消息發送給所有 HTTP 輪詢的客戶端
+        httpClients.forEach(client => {
+            client.resolve({ message });  // 解決 Promise，返回消息
+        });
+        httpClients = [];  // 清空已處理的 HTTP 輪詢請求
+
         ctx.status = 200;
         ctx.body = 'Message sent to WebSocket clients';
     } else {
         ctx.status = 400;
         ctx.body = 'No message specified in JSON';
     }
+});
+
+// /hook 路由，用於長輪詢
+router.post('/hook', (ctx) => {
+    // 創建一個 Promise，並將它存儲在 httpClients 陣列中
+    return new Promise(resolve => {
+        httpClients.push({ ctx, resolve });
+        console.log('新增輪詢請求');
+    }).then(response => {
+        // 當 WebSocket 發送消息時，HTTP 輪詢的客戶端將收到回應
+        ctx.status = 200;
+        ctx.body = response;  // 回應 WebSocket 發送的消息
+    });
 });
 
 // 使用 router 中間件
@@ -49,12 +72,18 @@ wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         console.log(`收到消息: ${message}`);
 
-        // 將消息廣播給所有其他客戶端
+        // 將消息廣播給所有其他 WebSocket 客戶端
         wss.clients.forEach((client) => {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(message.toString());
             }
         });
+
+        // 將消息發送給所有 HTTP 輪詢的客戶端
+        httpClients.forEach(client => {
+            client.resolve({ message });  // 解決 Promise，並將消息發送給 HTTP 輪詢客戶端
+        });
+        httpClients = [];  // 清空已處理的 HTTP 輪詢請求
     });
 
     ws.on('close', () => {

@@ -42,38 +42,45 @@
   "parameters": { "speed" : 50 }
 }
 
-[
-  // 鬧鐘控制
-  { "device": "clock", "command": "on" },   // 開啟鬧鐘
-  { "device": "clock", "command": "off" },  // 關閉鬧鐘
+// 鬧鐘控制
+{ "device": "clock", "command": "on" },   // 開啟鬧鐘
+{ "device": "clock", "command": "off" },  // 關閉鬧鐘
 
-  // 偵測裝置
-  { "device": "eye_detect", "command": "on" },    // 開啟眼睛偵測
-  { "device": "eye_detect", "command": "off" },   // 關閉眼睛偵測
+// 偵測裝置
+{ "device": "eye", "command": "on" },    // 開啟眼睛偵測
+{ "device": "eye", "command": "off" },   // 關閉眼睛偵測
 
-  { "device": "pose_detect", "command": "on" },   // 開啟坐姿偵測
-  { "device": "pose_detect", "command": "off" },  // 關閉坐姿偵測
+{ "device": "pose", "command": "on" },   // 開啟坐姿偵測
+{ "device": "pose", "command": "off" },  // 關閉坐姿偵測
 
-  { "device": "pillow_detect", "command": "on" }, // 開啟棉被偵測
-  { "device": "pillow_detect", "command": "off" },// 關閉棉被偵測
+{ "device": "pillow", "command": "on" }, // 開啟棉被偵測
+{ "device": "pillow", "command": "off" },// 關閉棉被偵測
 
-  { "device": "speech_detect", "command": "on" }, // 開啟語音偵測
-  { "device": "speech_detect", "command": "off" },// 關閉語音偵測
+{ "device": "speech", "command": "on" }, // 開啟語音偵測
+{ "device": "speech", "command": "off" },// 關閉語音偵測
 
-  // 喚醒裝置
-  { "device": "light_wake", "command": "on" },    // 開啟強光喚醒
-  { "device": "light_wake", "command": "flash" }, // 強光閃爍喚醒
-  { "device": "light_wake", "command": "off" },   // 關閉強光喚醒
+// 喚醒裝置
 
-  { "device": "motor_wake", "command": "on" },    // 開啟敲打喚醒
-  { "device": "motor_wake", "command": "off" },   // 關閉敲打喚醒
+{ "device": "feather", "command": "on" },  // 開啟羽毛喚醒
+{ "device": "feather", "command": "off" }, // 關閉羽毛喚醒
 
-  { "device": "feather_wake", "command": "on" },  // 開啟羽毛喚醒
-  { "device": "feather_wake", "command": "off" }, // 關閉羽毛喚醒
+{ "device": "push", "command": "on" },     // 開啟推喚醒
+{ "device": "push", "command": "off" },    // 關閉推喚醒
 
-  { "device": "push_wake", "command": "on" },     // 開啟推喚醒
-  { "device": "push_wake", "command": "off" },    // 關閉推喚醒
+{ "device": "stamp", "command": "on" },    // 開啟戳喚醒
+{ "device": "stamp", "command": "off" }    // 關閉戳喚醒
 
-  { "device": "stamp_wake", "command": "on" },    // 開啟戳喚醒
-  { "device": "stamp_wake", "command": "off" }    // 關閉戳喚醒
-]
+// 起床狀態
+
+{ "device": "you", "command": "up" },   // 標示用戶已起床
+{ "device": "you", "command": "down" }  // 標示用戶尚未起床
+
+
+{
+  "device": "you",
+  "command": "sleep_again",  // 賴床指令
+  "parameters": 
+  {
+    "duration": 5  // 賴床時間，以分鐘為單位
+  }
+}

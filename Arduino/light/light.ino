@@ -22,7 +22,7 @@ unsigned long flashInterval = 250; // Flashing interval in milliseconds
 
 void connectWiFi() {
     Serial.print("Connecting to WiFi");
-    WiFi.begin("S24");
+    WiFi.begin("lab");
     // WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
