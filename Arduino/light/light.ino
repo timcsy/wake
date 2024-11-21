@@ -7,7 +7,7 @@ const char* ssid = "lab";
 const char* password = "0912106664";
 
 // WebSocket server IP
-const char* serverIP = "172.16.1.147";
+const char* serverIP = "172.16.0.200";
 const uint16_t serverPort = 8765;
 WebSocketsClient webSocket;
 
@@ -22,8 +22,7 @@ unsigned long flashInterval = 250; // Flashing interval in milliseconds
 
 void connectWiFi() {
     Serial.print("Connecting to WiFi");
-    WiFi.begin("lab");
-    // WiFi.begin(ssid, password);
+    WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
         Serial.print(".");
