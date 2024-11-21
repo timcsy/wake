@@ -1,81 +1,72 @@
-// 打開燈光
+// 打開燈光（light_on）
 {
 	"device": "light",
   "command": "on"
 }
 
-// 關閉燈光
+// 關閉燈光（light_off）
 {
 	"device": "light",
   "command": "off"
 }
 
-// 調整燈光亮度
+// 調整燈光亮度（light_brightness）
 {
   "device": "light",
   "command": "set_brightness",
   "parameters": { "brightness": 75 }
 }
 
-// 閃光燈模式
+// 閃光燈模式（light_flash）
 {
   "device": "light",
   "command": "flash"
 }
 
-// 停止馬達
+// 停止馬達（motor_off）
 {
   "device": "motor",
   "command": "off"
 }
 
-// 開啟馬達
+// 開啟馬達（motor_on）
 {
   "device": "motor",
   "command": "on"
 }
 
-// 馬達以 x% 速度運轉
+// 馬達以 x% 速度運轉（motor_speed）
 {
   "device": "motor",
   "command": "set_speed",
   "parameters": { "speed" : 50 }
 }
 
-// 鬧鐘控制
-{ "device": "clock", "command": "on" },   // 開啟鬧鐘
-{ "device": "clock", "command": "off" },  // 關閉鬧鐘
+// 開啟鬧鐘（clock_on）
+{
+  "device": "clock",
+  "command": "on"
+}
 
-// 偵測裝置
-{ "device": "eye", "command": "on" },    // 開啟眼睛偵測
-{ "device": "eye", "command": "off" },   // 關閉眼睛偵測
+// 關閉鬧鐘（clock_off）
+{
+  "device": "clock",
+  "command": "off"
+}
 
-{ "device": "pose", "command": "on" },   // 開啟坐姿偵測
-{ "device": "pose", "command": "off" },  // 關閉坐姿偵測
+// 標示用戶已起床（get_up）
+{
+  "device": "you",
+  "command": "up"
+},
 
-{ "device": "pillow", "command": "on" }, // 開啟棉被偵測
-{ "device": "pillow", "command": "off" },// 關閉棉被偵測
+// 標示用戶尚未起床（not_get_up）
+{
+  "device": "you",
+  "command": "down"
+}
 
-{ "device": "speech", "command": "on" }, // 開啟語音偵測
-{ "device": "speech", "command": "off" },// 關閉語音偵測
-
-// 喚醒裝置
-
-{ "device": "feather", "command": "on" },  // 開啟羽毛喚醒
-{ "device": "feather", "command": "off" }, // 關閉羽毛喚醒
-
-{ "device": "push", "command": "on" },     // 開啟推喚醒
-{ "device": "push", "command": "off" },    // 關閉推喚醒
-
-{ "device": "stamp", "command": "on" },    // 開啟戳喚醒
-{ "device": "stamp", "command": "off" }    // 關閉戳喚醒
-
-// 起床狀態
-
-{ "device": "you", "command": "up" },   // 標示用戶已起床
-{ "device": "you", "command": "down" }  // 標示用戶尚未起床
-
-
+// 賴床（sleep_again）
 {
   "device": "you",
   "command": "sleep_again",  // 賴床指令
@@ -83,4 +74,88 @@
   {
     "duration": 5  // 賴床時間，以分鐘為單位
   }
+}
+
+// 開啟眼睛偵測（eye_on）
+{
+  "device": "eye",
+  "command": "on"
+}
+
+// 關閉眼睛偵測（eye_off）
+{
+  "device": "eye",
+  "command": "off"
+}
+
+// 開啟坐姿偵測（pose_on）
+{
+  "device": "pose",
+  "command": "on"
+}
+
+// 關閉坐姿偵測（pose_off）
+{
+  "device": "pose",
+  "command": "off"
+}
+
+// 開啟棉被偵測（covered_on）
+{
+  "device": "pillow",
+  "command": "on"
+}
+
+// 關閉棉被偵測（covered_off）
+{
+  "device": "pillow",
+  "command": "off"
+}
+
+// 開啟語音偵測（speech_on）
+{
+  "device": "speech",
+  "command": "on"
+}
+
+// 關閉語音偵測（speech_off）
+{
+  "device": "speech",
+  "command": "off"
+}
+
+// 開啟羽毛喚醒（feather_on）
+{
+  "device": "feather",
+  "command": "on"
+}
+
+// 關閉羽毛喚醒（feather_off）
+{
+  "device": "feather",
+  "command": "off"
+}
+
+// 開啟推喚醒（push_on）
+{
+  "device": "push",
+  "command": "on"
+}
+
+// 關閉推喚醒（push_off）
+{
+  "device": "push",
+  "command": "off"
+}
+
+// 開啟戳喚醒（stamp_on）
+{
+  "device": "stamp",
+  "command": "on"
+}
+
+// 關閉戳喚醒（stamp_off）
+{
+  "device": "stamp",
+  "command": "off"
 }

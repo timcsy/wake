@@ -1,5 +1,4 @@
 import json
-import websocket
 from ws_client import WebSocketClient
 import time
 
@@ -55,6 +54,18 @@ def motor_speed(speed: int):
         "device": "motor",
         "command": "set_speed",
         "parameters": { "speed" : speed }
+    })
+
+def clock_on():
+    ws_send({
+        "device": "clock",
+        "command": "on"
+    })
+
+def clock_off():
+    ws_send({
+        "device": "clock",
+        "command": "off"
     })
 
 def system_off():

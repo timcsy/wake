@@ -17,7 +17,8 @@ let wss;
 
 // POST 路由，用於接收 JSON 訊息並轉發給 WebSocket 客戶端
 router.post('/', (ctx) => {
-    const message = ctx.request.body.message; // 從 JSON 中提取 message
+    const data = ctx.request.body; // 從 JSON 中提取 message
+    const message = JSON.stringify(data);
 
     if (message) {
         console.log(`收到消息: ${message}`);
@@ -30,7 +31,7 @@ router.post('/', (ctx) => {
 
         // 將消息發送給所有 HTTP 輪詢的客戶端
         httpClients.forEach(client => {
-            client.resolve({ message });  // 解決 Promise，返回消息
+            client.resolve(message);  // 解決 Promise，返回消息
         });
         httpClients = [];  // 清空已處理的 HTTP 輪詢請求
 
@@ -81,7 +82,7 @@ wss.on('connection', (ws) => {
 
         // 將消息發送給所有 HTTP 輪詢的客戶端
         httpClients.forEach(client => {
-            client.resolve({ message });  // 解決 Promise，並將消息發送給 HTTP 輪詢客戶端
+            client.resolve(message.toString());  // 解決 Promise，並將消息發送給 HTTP 輪詢客戶端
         });
         httpClients = [];  // 清空已處理的 HTTP 輪詢請求
     });
