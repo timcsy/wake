@@ -15,3 +15,30 @@ Python
 ```
 python run.py
 ```
+
+HTTP polling
+```
+POST http://<your server address and port>/hook
+
+{
+	// JSON API
+}
+```
+
+WebSocket Connection
+```
+ws://<your server address and port>/
+
+{
+	// JSON API
+}
+```
+
+HTTP send command
+```
+POST http://<your server address and port>/
+
+{
+	// JSON API
+}
+```

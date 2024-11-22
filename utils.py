@@ -90,6 +90,90 @@ def sleep_again(duration=300):
         }
     })
 
+def eye_on():
+    ws_send({
+        "device": "eye",
+        "command": "on"
+    })
+
+def eye_off():
+    ws_send({
+        "device": "eye",
+        "command": "off"
+    })
+
+def pose_on():
+    ws_send({
+        "device": "pose",
+        "command": "on"
+    })
+
+def pose_off():
+    ws_send({
+        "device": "pose",
+        "command": "off"
+    })
+
+def covered_on():
+    ws_send({
+        "device": "pillow",
+        "command": "on"
+    })
+
+def covered_off():
+    ws_send({
+        "device": "pillow",
+        "command": "off"
+    })
+
+def speech_on():
+    ws_send({
+        "device": "speech",
+        "command": "on"
+    })
+
+def speech_off():
+    ws_send({
+        "device": "speech",
+        "command": "off"
+    })
+
+def feather_on():
+    ws_send({
+        "device": "feather",
+        "command": "on"
+    })
+
+def feather_off():
+    ws_send({
+        "device": "feather",
+        "command": "off"
+    })
+
+def push_on():
+    ws_send({
+        "device": "push",
+        "command": "on"
+    })
+
+def push_off():
+    ws_send({
+        "device": "push",
+        "command": "off"
+    })
+
+def stamp_on():
+    ws_send({
+        "device": "stamp",
+        "command": "on"
+    })
+
+def stamp_off():
+    ws_send({
+        "device": "stamp",
+        "command": "off"
+    })
+
 def system_off():
     light_off()
     motor_off()
