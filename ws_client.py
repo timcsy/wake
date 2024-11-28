@@ -1,3 +1,4 @@
+import queue
 import websocket
 import threading
 
@@ -6,8 +7,10 @@ class WebSocketClient:
         self.url = url
         self.ws = None
         self.thread = None
+        self.inbox = queue.Queue()
 
     def on_message(self, ws, message):
+        self.inbox.put(message)
         print(f"收到服务器消息: {message}")
 
 

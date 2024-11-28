@@ -66,6 +66,12 @@
   "command": "down"
 }
 
+// 詢問用戶是否起床（get_state）
+{
+  "device": "you",
+  "command": "state"
+}
+
 // 賴床（sleep_again）
 {
   "device": "you",

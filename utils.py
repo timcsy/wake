@@ -1,7 +1,25 @@
+from enum import Enum
 import json
 from ws_client import WebSocketClient
 import time
 
+###############################################
+#                    States                   #
+###############################################
+class Stage(Enum):
+    NONE = 0
+    EYE = 1
+    COVERED = 2
+    POSE = 3
+
+CLOCK = False
+STATE = Stage.NONE
+SPEECH = False
+GET_UP = False
+
+###############################################
+#              WebSocket Commands             #
+###############################################
 ws = WebSocketClient('ws://localhost:8765')
 ws.start()
 time.sleep(1)
@@ -10,6 +28,29 @@ def ws_send(data):
     msg = json.dumps(data)
     ws.send(msg)
 
+def refresh_state():
+    while True:
+        if not ws.inbox.empty():
+            msg = ws.inbox.get()
+            data = json.loads(msg)
+            if data['device'] == 'clock':
+                if data['command'] == 'on':
+                    clock_on()
+                elif data['command'] == 'off':
+                    clock_off()
+            elif data['device'] == 'you':
+                if data['command'] == 'state':
+                    if GET_UP:
+                        get_up()
+                    else:
+                        not_get_up()
+
+def close():
+    ws.close()
+
+###############################################
+#               Arduino Commands              #
+###############################################
 def light_on():
     ws_send({
         "device": "light",
@@ -56,13 +97,22 @@ def motor_speed(speed: int):
         "parameters": { "speed" : speed }
     })
 
+###############################################
+#               Control Commands              #
+###############################################
 def clock_on():
+    global CLOCK
+    CLOCK = True
     ws_send({
         "device": "clock",
         "command": "on"
     })
 
 def clock_off():
+    global CLOCK
+    CLOCK = False
+    light_off()
+    motor_off()
     ws_send({
         "device": "clock",
         "command": "off"
@@ -80,8 +130,15 @@ def not_get_up():
         "command": "down"
     })
 
+def get_state():
+    ws_send({
+        "device": "you",
+        "command": "state"
+    })
+
 def sleep_again(duration=300):
     # duration: 賴床時間，以秒為單位
+    # deprecated
     ws_send({
         "device": "you",
         "command": "sleep_again",
@@ -90,54 +147,76 @@ def sleep_again(duration=300):
         }
     })
 
+###############################################
+#               Feature Commands              #
+###############################################
 def eye_on():
+    global STATE
+    STATE = Stage.EYE
     ws_send({
         "device": "eye",
         "command": "on"
     })
 
 def eye_off():
+    global STATE
+    STATE = Stage.NONE
     ws_send({
         "device": "eye",
         "command": "off"
     })
 
 def pose_on():
+    global STATE
+    STATE = Stage.POSE
     ws_send({
         "device": "pose",
         "command": "on"
     })
 
 def pose_off():
+    global STATE
+    STATE = Stage.NONE
     ws_send({
         "device": "pose",
         "command": "off"
     })
 
 def covered_on():
+    global STATE
+    STATE = Stage.COVERED
     ws_send({
         "device": "pillow",
         "command": "on"
     })
 
 def covered_off():
+    global STATE
+    STATE = Stage.NONE
     ws_send({
         "device": "pillow",
         "command": "off"
     })
 
 def speech_on():
+    global SPEECH
+    SPEECH = True
     ws_send({
         "device": "speech",
         "command": "on"
     })
 
 def speech_off():
+    global SPEECH
+    SPEECH = False
     ws_send({
         "device": "speech",
         "command": "off"
     })
 
+###############################################
+#            Future Feature Commands          #
+###############################################
 def feather_on():
     ws_send({
         "device": "feather",
@@ -173,10 +252,3 @@ def stamp_off():
         "device": "stamp",
         "command": "off"
     })
-
-def system_off():
-    light_off()
-    motor_off()
-
-def close():
-    ws.close()

@@ -18,7 +18,12 @@ let wss;
 // POST 路由，用於接收 JSON 訊息並轉發給 WebSocket 客戶端
 router.post('/', (ctx) => {
     const data = ctx.request.body; // 從 JSON 中提取 message
-    const message = JSON.stringify(data);
+    let message;
+    if (Object.keys(data).length == 1) {
+        message = Object.keys(data)[0];
+    } else {
+        message = JSON.stringify(data);
+    }
 
     if (message) {
         console.log(`收到消息: ${message}`);
