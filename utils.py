@@ -42,9 +42,9 @@ def refresh_state():
             elif data['device'] == 'you':
                 if data['command'] == 'state':
                     if GET_UP:
-                        get_up()
+                        get_up(force=True)
                     else:
-                        not_get_up()
+                        not_get_up(force=True)
 
 def close():
     ws.close()
@@ -120,17 +120,23 @@ def clock_off():
         "command": "off"
     })
 
-def get_up():
-    ws_send({
-        "device": "you",
-        "command": "up"
-    })
+def get_up(force=False):
+    global GET_UP
+    if force or not GET_UP:
+        GET_UP = True
+        ws_send({
+            "device": "you",
+            "command": "up"
+        })
 
-def not_get_up():
-    ws_send({
-        "device": "you",
-        "command": "down"
-    })
+def not_get_up(force=False):
+    global GET_UP
+    if force or GET_UP:
+        GET_UP = False
+        ws_send({
+            "device": "you",
+            "command": "down"
+        })
 
 def get_state():
     ws_send({
@@ -169,23 +175,6 @@ def eye_off():
         "command": "off"
     })
 
-def pose_on():
-    global STATE
-    STATE = Stage.POSE
-    ws_send({
-        "device": "pose",
-        "command": "on"
-    })
-
-def pose_off():
-    global STATE
-    STATE = Stage.NONE
-    motor_off()
-    ws_send({
-        "device": "pose",
-        "command": "off"
-    })
-
 def covered_on():
     global STATE
     STATE = Stage.COVERED
@@ -197,10 +186,27 @@ def covered_on():
 def covered_off():
     global STATE
     STATE = Stage.NONE
+    motor_off()
+    ws_send({
+        "device": "pillow",
+        "command": "off"
+    })
+
+def pose_on():
+    global STATE
+    STATE = Stage.POSE
+    ws_send({
+        "device": "pose",
+        "command": "on"
+    })
+
+def pose_off():
+    global STATE
+    STATE = Stage.NONE
     clock_off()
     get_up()
     ws_send({
-        "device": "pillow",
+        "device": "pose",
         "command": "off"
     })
 
@@ -260,3 +266,6 @@ def stamp_off():
         "device": "stamp",
         "command": "off"
     })
+
+if __name__ == "__main__":
+    refresh_state()

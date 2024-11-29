@@ -15,7 +15,7 @@ def calculate_angle(a, b, c):
     ang = math.degrees(math.atan2(c[1] - b[1], c[0] - b[0]) - math.atan2(a[1] - b[1], a[0] - b[0]))
     return abs(ang)
 
-def sit_up(rgb_frame, frame):
+def sit_up(rgb_frame, frame, idle=False):
     # 使用 MediaPipe 偵測姿勢
     result = pose.process(rgb_frame)
 
@@ -62,11 +62,17 @@ def sit_up(rgb_frame, frame):
             cv2.putText(frame, f'Angle: {int(body_angle)}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
             # 根據角度執行動作
-            if body_angle < 135:
-                utils.pose_off()
-            elif body_angle > 135:
-                utils.light_flash()
-                utils.motor_on()
+            if not idle:
+                if body_angle < 135:
+                    utils.pose_off()
+                elif body_angle > 135:
+                    utils.light_flash()
+                    utils.motor_on()
+            else:
+                if body_angle < 135:
+                    utils.get_up()
+                elif body_angle > 135:
+                    utils.not_get_up()
 
     # 顯示影像
     cv2.imshow('Pose with Shoulders and Feet', frame)
@@ -154,6 +160,30 @@ def main():
 
     cap.release()
     cv2.destroyAllWindows()
+
+def idle():
+    # 開啟攝影機
+    cap = cv2.VideoCapture(0)
+
+    while utils.CLOCK and cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # 將影像轉換為RGB格式
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        if not utils.CLOCK:
+            sit_up(rgb_frame, frame, idle=True)
+        else:
+            break
+
+        if cv2.waitKey(5) & 0xFF == 27:  # 按 "ESC" 鍵退出
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     utils.clock_on()
