@@ -7,7 +7,7 @@ const char* ssid = "lab";
 const char* password = "0912106664";
 
 // WebSocket server IP
-const char* serverIP = "172.16.0.200";
+const char* serverIP = "172.16.0.1";
 const uint16_t serverPort = 8765;
 WebSocketsClient webSocket;
 
