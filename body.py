@@ -47,28 +47,26 @@ def sit_up(rgb_frame, frame):
         # 檢查必要點是否存在
         if shoulder_avg is None or foot_avg is None or hip is None:
             cv2.putText(frame, 'Missing key landmarks!', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-            cv2.imshow('Sit-up with Shoulders and Feet', frame)
-            return
+        else:
+            # 畫出關鍵點與連線
+            cv2.circle(frame, (int(shoulder_avg[0]), int(shoulder_avg[1])), 5, (0, 255, 0), -1)  # 雙肩平均點
+            cv2.circle(frame, (int(hip[0]), int(hip[1])), 5, (255, 0, 0), -1)                   # 臀部
+            cv2.circle(frame, (int(foot_avg[0]), int(foot_avg[1])), 5, (0, 255, 255), -1)       # 雙腳平均點
+            cv2.line(frame, (int(shoulder_avg[0]), int(shoulder_avg[1])), (int(hip[0]), int(hip[1])), (0, 255, 255), 2)
+            cv2.line(frame, (int(hip[0]), int(hip[1])), (int(foot_avg[0]), int(foot_avg[1])), (255, 0, 255), 2)
 
-        # 畫出關鍵點與連線
-        cv2.circle(frame, (int(shoulder_avg[0]), int(shoulder_avg[1])), 5, (0, 255, 0), -1)  # 雙肩平均點
-        cv2.circle(frame, (int(hip[0]), int(hip[1])), 5, (255, 0, 0), -1)                   # 臀部
-        cv2.circle(frame, (int(foot_avg[0]), int(foot_avg[1])), 5, (0, 255, 255), -1)       # 雙腳平均點
-        cv2.line(frame, (int(shoulder_avg[0]), int(shoulder_avg[1])), (int(hip[0]), int(hip[1])), (0, 255, 255), 2)
-        cv2.line(frame, (int(hip[0]), int(hip[1])), (int(foot_avg[0]), int(foot_avg[1])), (255, 0, 255), 2)
+            # 計算雙肩平均點-臀部-雙腳平均點的夾角
+            body_angle = calculate_angle(shoulder_avg, hip, foot_avg)
 
-        # 計算雙肩平均點-臀部-雙腳平均點的夾角
-        body_angle = calculate_angle(shoulder_avg, hip, foot_avg)
+            # 顯示角度
+            cv2.putText(frame, f'Angle: {int(body_angle)}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-        # 顯示角度
-        cv2.putText(frame, f'Angle: {int(body_angle)}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        # 根據角度執行動作
-        if body_angle < 135:
-            utils.pose_off()
-        elif body_angle > 135:
-            utils.light_flash()
-            utils.motor_on()
+            # 根據角度執行動作
+            if body_angle < 135:
+                utils.pose_off()
+            elif body_angle > 135:
+                utils.light_flash()
+                utils.motor_on()
 
     # 顯示影像
     cv2.imshow('Pose with Shoulders and Feet', frame)

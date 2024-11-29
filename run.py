@@ -20,6 +20,7 @@ def run_eye_covered_pose():
             last_clock = False
             last_state = utils.Stage.NONE
             utils.clock_off()
+        
         if utils.CLOCK and utils.STATE == utils.Stage.NONE:
             if last_state == utils.Stage.NONE:
                 last_state = utils.Stage.EYE
@@ -36,20 +37,23 @@ def run_eye_covered_pose():
 
 def run_speech():
     while True:
-        utils.clock_on()
-        speech.main()
+        if utils.CLOCK:
+            speech.main()
 
 if __name__ == "__main__":
     # 創建執行緒
     main_thread = threading.Thread(target=run_eye_covered_pose)
     speech_thread = threading.Thread(target=run_speech)
+    refresh_thread = threading.Thread(target=run_refresh_state)
 
     # 啟動執行緒
     main_thread.start()
     speech_thread.start()
+    refresh_thread.start()
 
     # 等待執行緒結束
     main_thread.join()
     speech_thread.join()
+    refresh_thread.join()
 
     print("All threads have finished execution.")
