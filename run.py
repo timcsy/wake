@@ -20,6 +20,7 @@ def run_eye_covered_pose():
             last_clock = False
             last_state = utils.Stage.NONE
             utils.clock_off()
+            body.idle()
         
         if utils.CLOCK and utils.STATE == utils.Stage.NONE:
             if last_state == utils.Stage.NONE:
