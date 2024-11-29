@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import utils
+import env
 
 def main(flip=True, threshold=0.02):
     count = 0
@@ -10,7 +11,7 @@ def main(flip=True, threshold=0.02):
 
     face_mesh = mp_face_mesh.FaceMesh(static_image_mode=False, max_num_faces=1, min_detection_confidence=0.5)
 
-    cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(env.eye_cam, cv2.CAP_DSHOW)
 
     while utils.CLOCK and utils.STATE == utils.Stage.EYE and cap.isOpened():
         ret, frame = cap.read()

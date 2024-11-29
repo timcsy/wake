@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 from torchvision import transforms
 import utils
+import env
 
 # 初始化MediaPipe Pose
 mp_pose = mp.solutions.pose
@@ -140,7 +141,7 @@ def main():
     count = 0
 
     # 開啟攝影機
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(env.body_cam)
 
     while utils.CLOCK and cap.isOpened():
         ret, frame = cap.read()
@@ -168,7 +169,7 @@ def main():
 
 def idle():
     # 開啟攝影機
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(env.body_cam)
 
     while utils.CLOCK and cap.isOpened():
         ret, frame = cap.read()
