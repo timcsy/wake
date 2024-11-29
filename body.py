@@ -114,7 +114,7 @@ preprocess = transforms.Compose([
 last_state = None
 
 def covered(img_rgb):
-    global last_state
+    global last_state, count
     img_resized = cv2.resize(img_rgb, (128, 128))
     
     # 正規化處理
@@ -131,9 +131,14 @@ def covered(img_rgb):
         if last_state != 0:
             print('沒被子')
         last_state = 0
-        utils.covered_off()
+        count += 1
+        if count > 10:
+            utils.covered_off()
 
 def main():
+    global count
+    count = 0
+
     # 開啟攝影機
     cap = cv2.VideoCapture(0)
 

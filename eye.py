@@ -2,7 +2,9 @@ import cv2
 import mediapipe as mp
 import utils
 
-def main(flip=True):
+def main(flip=True, threshold=0.02):
+    count = 0
+
     mp_face_mesh = mp.solutions.face_mesh
     mp_drawing = mp.solutions.drawing_utils
 
@@ -39,12 +41,14 @@ def main(flip=True):
                 left_eye_height = face_landmarks.landmark[145].y - left_eye.y
                 right_eye_height = face_landmarks.landmark[374].y - right_eye.y
 
-                if left_eye_height < 0.01 and right_eye_height < 0.01:
+                if left_eye_height < threshold and right_eye_height < threshold:
                     cv2.putText(frame, "Eyes Closed", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                     utils.light_flash()
                 else:
                     cv2.putText(frame, "Eyes Open", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                    utils.eye_off()
+                    count += 1
+                    if count > 10:
+                        utils.eye_off()
 
         cv2.imshow('Eye Blink Detection', frame)
 
