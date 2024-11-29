@@ -25,7 +25,7 @@ def record_audio(duration=3, samplerate=16000):
 def recognize_speech():
     recognizer = sr.Recognizer()
 
-    while True:
+    while utils.CLOCK and utils.SPEECH:
         print("請說話 (錄音進行中)...")
 
         # Record audio using sounddevice
@@ -42,7 +42,6 @@ def recognize_speech():
             # Analyze intent
             if text and analyze_intent(text):
                 print("偵測到停止指令，停止叫起床程序。")
-                utils.system_off()
                 return
         except sr.UnknownValueError:
             print("無法辨識語音，請再試一次。")
@@ -77,12 +76,16 @@ def analyze_intent(text):
 
 def main():
     try:
-        utils.motor_on()
+        utils.speech_on()
         recognize_speech()
+        utils.speech_off()
     except KeyboardInterrupt:
         print("程式已停止")
     except Exception as e:
         print(f"發生錯誤：{e}")
 
 if __name__ == "__main__":
+    utils.clock_on()
+    utils.light_flash()
+    utils.motor_on()
     main()

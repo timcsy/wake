@@ -10,7 +10,7 @@ def main(flip=True):
 
     cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 
-    while cap.isOpened():
+    while utils.CLOCK and utils.STATE == utils.Stage.EYE and cap.isOpened():
         ret, frame = cap.read()
         if not ret:
             break
@@ -44,7 +44,7 @@ def main(flip=True):
                     utils.light_flash()
                 else:
                     cv2.putText(frame, "Eyes Open", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-                    utils.light_off()
+                    utils.eye_off()
 
         cv2.imshow('Eye Blink Detection', frame)
 
@@ -55,5 +55,7 @@ def main(flip=True):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
+    utils.clock_on()
+    utils.eye_on()
     main()
     # main(flip=False)

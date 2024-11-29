@@ -11,6 +11,7 @@ class Stage(Enum):
     EYE = 1
     COVERED = 2
     POSE = 3
+    MIXED = 4
 
 CLOCK = False
 STATE = Stage.NONE
@@ -109,8 +110,9 @@ def clock_on():
     })
 
 def clock_off():
-    global CLOCK
+    global CLOCK, STATE, SPEECH
     CLOCK = False
+    STATE = Stage.NONE
     light_off()
     motor_off()
     ws_send({
@@ -161,6 +163,7 @@ def eye_on():
 def eye_off():
     global STATE
     STATE = Stage.NONE
+    light_off()
     ws_send({
         "device": "eye",
         "command": "off"
@@ -177,6 +180,7 @@ def pose_on():
 def pose_off():
     global STATE
     STATE = Stage.NONE
+    motor_off()
     ws_send({
         "device": "pose",
         "command": "off"
@@ -193,6 +197,8 @@ def covered_on():
 def covered_off():
     global STATE
     STATE = Stage.NONE
+    clock_off()
+    get_up()
     ws_send({
         "device": "pillow",
         "command": "off"
@@ -209,6 +215,8 @@ def speech_on():
 def speech_off():
     global SPEECH
     SPEECH = False
+    clock_off()
+    get_up()
     ws_send({
         "device": "speech",
         "command": "off"

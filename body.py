@@ -16,36 +16,62 @@ def calculate_angle(a, b, c):
     return abs(ang)
 
 def sit_up(rgb_frame, frame):
-    # 使用MediaPipe偵測姿勢
+    # 使用 MediaPipe 偵測姿勢
     result = pose.process(rgb_frame)
 
     if result.pose_landmarks:
         landmarks = result.pose_landmarks.landmark
 
-        # 提取頭部、肩膀、臀部的地標
-        head = [landmarks[0].x * frame.shape[1], landmarks[0].y * frame.shape[0]]        # 頭部
-        shoulder = [landmarks[11].x * frame.shape[1], landmarks[11].y * frame.shape[0]]  # 左肩
-        hip = [landmarks[23].x * frame.shape[1], landmarks[23].y * frame.shape[0]]       # 左臀
+        def get_landmark(idx_right, idx_left):
+            """
+            計算左右肩或左右腳的平均點
+            """
+            right = [landmarks[idx_right].x * frame.shape[1], landmarks[idx_right].y * frame.shape[0]] \
+                if landmarks[idx_right].visibility > 0.5 else None
+            left = [landmarks[idx_left].x * frame.shape[1], landmarks[idx_left].y * frame.shape[0]] \
+                if landmarks[idx_left].visibility > 0.5 else None
 
-        # 畫出關鍵點和肩膀到臀部的向量
-        cv2.circle(frame, (int(head[0]), int(head[1])), 5, (0, 0, 255), -1)    # 頭部
-        cv2.circle(frame, (int(shoulder[0]), int(shoulder[1])), 5, (0, 255, 0), -1)  # 肩膀
-        cv2.circle(frame, (int(hip[0]), int(hip[1])), 5, (255, 0, 0), -1)      # 臀部
-        cv2.line(frame, (int(shoulder[0]), int(shoulder[1])), (int(hip[0]), int(hip[1])), (0, 255, 255), 3)
+            if right and left:
+                # 返回平均點
+                return [(right[0] + left[0]) / 2, (right[1] + left[1]) / 2]
+            return right if right else left
 
-        # 計算肩膀-臀部-頭部的角度
-        body_angle = calculate_angle(head, shoulder, hip)
+        # 提取雙肩和雙腳的平均點
+        shoulder_avg = get_landmark(12, 11)  # 右肩和左肩
+        foot_avg = get_landmark(28, 27)     # 右腳踝和左腳踝
+
+        # 提取臀部位置
+        hip = [landmarks[23].x * frame.shape[1], landmarks[23].y * frame.shape[0]] \
+            if landmarks[23].visibility > 0.5 else None
+
+        # 檢查必要點是否存在
+        if shoulder_avg is None or foot_avg is None or hip is None:
+            cv2.putText(frame, 'Missing key landmarks!', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            cv2.imshow('Sit-up with Shoulders and Feet', frame)
+            return
+
+        # 畫出關鍵點與連線
+        cv2.circle(frame, (int(shoulder_avg[0]), int(shoulder_avg[1])), 5, (0, 255, 0), -1)  # 雙肩平均點
+        cv2.circle(frame, (int(hip[0]), int(hip[1])), 5, (255, 0, 0), -1)                   # 臀部
+        cv2.circle(frame, (int(foot_avg[0]), int(foot_avg[1])), 5, (0, 255, 255), -1)       # 雙腳平均點
+        cv2.line(frame, (int(shoulder_avg[0]), int(shoulder_avg[1])), (int(hip[0]), int(hip[1])), (0, 255, 255), 2)
+        cv2.line(frame, (int(hip[0]), int(hip[1])), (int(foot_avg[0]), int(foot_avg[1])), (255, 0, 255), 2)
+
+        # 計算雙肩平均點-臀部-雙腳平均點的夾角
+        body_angle = calculate_angle(shoulder_avg, hip, foot_avg)
 
         # 顯示角度
         cv2.putText(frame, f'Angle: {int(body_angle)}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
+        # 根據角度執行動作
         if body_angle < 135:
-            utils.system_off()
+            utils.pose_off()
         elif body_angle > 135:
+            utils.light_flash()
             utils.motor_on()
 
     # 顯示影像
-    cv2.imshow('Sit-up', frame)
+    cv2.imshow('Pose with Shoulders and Feet', frame)
 
 
 # 定義 CNN 模型
@@ -101,14 +127,13 @@ def covered(img_rgb):
         if last_state != 0:
             print('沒被子')
         last_state = 0
-        utils.motor_off()
+        utils.covered_off()
 
 def main():
     # 開啟攝影機
     cap = cv2.VideoCapture(0)
-    utils.motor_on()
 
-    while cap.isOpened():
+    while utils.CLOCK and cap.isOpened():
         ret, frame = cap.read()
         if not ret:
             break
@@ -116,8 +141,15 @@ def main():
         # 將影像轉換為RGB格式
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        sit_up(rgb_frame, frame)
-        # covered(rgb_frame)
+        if utils.STATE == utils.Stage.POSE:
+            sit_up(rgb_frame, frame)
+        elif utils.STATE == utils.Stage.COVERED:
+            covered(rgb_frame)
+        elif utils.STATE == utils.Stage.MIXED:
+            sit_up(rgb_frame, frame)
+            covered(rgb_frame)
+        else:
+            break
 
         if cv2.waitKey(5) & 0xFF == 27:  # 按 "ESC" 鍵退出
             break
@@ -126,4 +158,7 @@ def main():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
+    utils.clock_on()
+    # utils.covered_on()
+    utils.pose_on()
     main()
