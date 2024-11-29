@@ -1,14 +1,15 @@
+#include "Secret.h"
 #include <ESP8266WiFi.h>
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
 
 // WiFi credentials
-const char* ssid = "lab";
-const char* password = "0912106664";
+const char* ssid = WIFI_SSID;
+const char* password = WIFI_PASSWORD;
 
 // WebSocket server IP
-const char* serverIP = "172.16.0.1";
-const uint16_t serverPort = 8765;
+const char* serverIP = SERVER_IP;
+const uint16_t serverPort = SERVER_PORT;
 WebSocketsClient webSocket;
 
 // Motor control pins
@@ -18,7 +19,8 @@ const int motorPin2 = D2; // IN2 should be LOW
 // Function to connect to WiFi
 void connectWiFi() {
     Serial.print("Connecting to WiFi");
-    WiFi.begin(ssid, password);
+    if (password == "") WiFi.begin(ssid);
+    else WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(1000);
         Serial.print(".");

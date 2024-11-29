@@ -410,3 +410,4 @@ $RECYCLE.BIN/
 
 data/**/*
 drafts/**/*
+Arduino/**/Secret.h

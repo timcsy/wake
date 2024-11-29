@@ -21,9 +21,15 @@ npm install
 
 ### Arduino
 
-Using ESP8266
+Setup [ESP8266](https://github.com/esp8266/Arduino).
 
-Change Your WiFi SSID, password, and server IP address.
+Install Libraries:
+- [WebSockets](https://github.com/Links2004/arduinoWebSockets)
+- [ArduinoJson](https://arduinojson.org/?utm_source=meta&utm_medium=library.properties)
+
+Change Your WiFi SSID, password, and server IP address and port.
+
+To do so, please copy the `Secret_template.h` in the `Arduino/motor` and the `Arduino/light` and rename to `Secret.h`, and edit the variables inside.
 
 
 ## Usage
