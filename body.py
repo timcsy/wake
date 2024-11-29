@@ -168,10 +168,11 @@ def main():
     cv2.destroyAllWindows()
 
 def idle():
+    print('待命中...')
     # 開啟攝影機
     cap = cv2.VideoCapture(env.body_cam)
 
-    while utils.CLOCK and cap.isOpened():
+    while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
             break

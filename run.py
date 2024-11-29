@@ -39,7 +39,8 @@ def run_eye_covered_pose():
 def run_speech():
     while True:
         if utils.CLOCK:
-            speech.main()
+            # speech.main()
+            pass
 
 if __name__ == "__main__":
     # 創建執行緒
