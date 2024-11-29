@@ -1,0 +1,11 @@
+opencv-python
+mediapipe
+websocket-client
+torch
+torchvision
+torchaudio
+grad-cam
+scikit-learn
+openai==0.28.0
+SpeechRecognition
+vosk
