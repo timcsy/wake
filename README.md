@@ -2,27 +2,41 @@
 
 簡報：https://www.canva.com/design/DAGSHvYgQrA/2Nc-o4nzHSURe0rOtom0QQ/view
 
+## Setup
+
+### Python
+
+Install Python 3
+```
+pip install -r requirements.txt
+```
+
+### Node.js Server
+
+Install Node.js LTS version
+```
+cd server
+npm install
+```
+
+### Arduino
+
+Using ESP8266
+
+Change Your WiFi SSID, password, and server IP address.
+
+
 ## Usage
 
 Server
 ```
-cd ./server
-npm install koa koa-router koa-bodyparser @koa/cors ws
+cd server
 node server.js
 ```
 
 Python
 ```
 python run.py
-```
-
-HTTP polling
-```
-POST http://<your server address and port>/hook
-
-{
-	// JSON API
-}
 ```
 
 WebSocket Connection
@@ -41,4 +55,9 @@ POST http://<your server address and port>/
 {
 	// JSON API
 }
+```
+
+HTTP polling
+```
+POST http://<your server address and port>/hook
 ```
