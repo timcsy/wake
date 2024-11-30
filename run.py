@@ -1,5 +1,6 @@
 # run.py
 import threading
+import time
 import eye
 import body
 import speech
@@ -39,8 +40,8 @@ def run_eye_covered_pose():
 def run_speech():
     while True:
         if utils.CLOCK:
-            # speech.main()
-            pass
+            speech.main()
+            time.sleep(0.1)
 
 if __name__ == "__main__":
     # 創建執行緒
@@ -59,3 +60,4 @@ if __name__ == "__main__":
     refresh_thread.join()
 
     print("All threads have finished execution.")
+    
