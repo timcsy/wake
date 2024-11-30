@@ -45,6 +45,7 @@ def refresh_state():
                         get_up(force=True)
                     else:
                         not_get_up(force=True)
+        time.sleep(0.1)
 
 def close():
     ws.close()
