@@ -133,11 +133,11 @@ def covered(img_rgb):
             print('沒被子')
         last_state = 0
         count += 1
-        if count > 10:
+        if count > 100:
             utils.covered_off()
 
 def main():
-    global count
+    global count, last_state
     count = 0
 
     # 開啟攝影機
@@ -159,6 +159,7 @@ def main():
             sit_up(rgb_frame, frame)
             covered(rgb_frame)
         else:
+            last_state = None
             break
 
         if cv2.waitKey(5) & 0xFF == 27:  # 按 "ESC" 鍵退出
